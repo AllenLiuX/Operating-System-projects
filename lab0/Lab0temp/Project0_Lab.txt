@@ -1,0 +1,354 @@
+TA Name: Karen Quadros
+Office Hours: Monday 4-6 p.m. 
+Email: quadroskaren369@gmail.com
+
+Few Basic Instructions: (Detailed instructions on piazza)
+    1.Please ask your questions related to assignments on piazza instead of sending emails to TAs, so that everyone can see 
+        the question and the answer. 
+        Before asking a question, check if someone has already asked that question. We will not answer repeated questions.
+        
+    2.You will have one project per week, in this order: P0, P1A, P1B, P4A, P2A, P2B, P4B, P3A, P3B, P4C. 
+        (In case you didn't notice it ISN'T in simple increasing order)
+
+    3.Projects will be due on Wednesdays at 11.59PM. The lateness policy is exponential: 2^{N-1}, where N is the number of 
+        late days. This means:
+        - a 1% penalty for a day late
+        - a 2% penalty for 2 days late
+        - 4% for 3 days
+        - 8% for 4 days
+        - 16% for 5 days
+            ...
+    4.Read the manual pages for all the functions you are going to use before writing the code. 
+    
+    5.Questions about your project grades should be addressed to the TAs responsible for it.
+        Howard and Shaan: Lab 0, 1A, 1B and 4A
+        Rishab and Nikita: Lab 2A, 2B and 4C
+        Karen and Alex: Lab 3A, 3B and 4B
+    
+    6.Please remember to download your submissions and check if you submitted the correct files. 
+        Empty submissions - or submissions in the wrong format - cannot be graded and will therefore be scored with a 0.
+        Therefore, check that your submission is in the right format (.tar.gz), and that the correct version of your files 
+        are included. Please pay extreme attention to your submission's filename, as names that do not follow the spec will
+        receive a 15 point deduction.
+     
+    7.This class uses SEASnet Linux servers. All grading will only be performed on lnxsrv09.seas.ucla.edu unless otherwise
+        stated. Make sure you only test your code on that server. Please keep in mind that a submission compiles and runs on
+        Mac/Ubuntu/Windows does not mean it works on lnxsrv09!
+     
+    8.There are different GCC versions on the SEASnet server. Please use the one in /usr/local/cs/bin. 
+        So specifically, please put /usr/local/cs/bin at the beginning of your PATH.
+
+------------------------------------------------------------------------------------------------------------------------------
+Extra Instructions by TA Karen:
+    1.Come to discussion after reading the spec at
+        http://web.cs.ucla.edu/~harryxu/courses/111/winter20/ProjectGuide/index.htm
+     
+    2.Make sure to order required Beaglebone model (Beaglebone Green Wireless model). Detailed model specifications.. 
+        (awaiting response from other TAs)
+     
+    3.Go through the gdb tutorial I have shared. Get comfortable with gdb you will need it for debugging as the projects 
+        get tougher.
+
+    4.Coursework and projects have been separated. So ask project specific questions to responsible TAs on piazza. 
+        And coursework specific questions to professor Harry.
+
+------------------------------------------------------------------------------------------------------------------------------
+
+First create a seasnet account if you don't have one:
+https://www.seasnet.ucla.edu/student-account-info/
+
+Instructions for VPN:
+https://www.it.ucla.edu/bol/services/virtual-private-network-vpn-clients
+
+ssh into the seasnet server using command as follows:
+    ssh <seasnet_user_name>@lnxsrv09.seas.ucla.edu
+then set your path correctly
+    export PATH=$PATH:/usr/local/cs/bin
+The above command will have to be run everytime you start a new session.
+Look at more permanenet ways to set your path.
+(https://opensource.com/article/17/6/set-path-linux)
+
+gcc -g -Wall -Wextra -o lab0 lab0.c
+------------------------------------------------------------------------------------------------------------------------------
+
+Project 0 description:
+http://web.cs.ucla.edu/~harryxu/courses/111/winter20/ProjectGuide/P0.html
+
+------------------------------------------------------------------------------------------------------------------------------
+Detailed Makefile manual:
+https://www.gnu.org/software/make/manual/make.html
+http://web.mit.edu/gnu/doc/html/make_2.html
+
+gcc basics:
+https://www.cprogramming.com/gcc.html
+
+What is gdb?
+GDB, the GNU Project debugger, allows you to see what is going on `inside' another program while it executes -- or what another program was doing at the moment it crashed.
+
+GDB can do four main kinds of things (plus other things in support of these) to help you catch bugs in the act:
+    1.Start your program, specifying anything that might affect its behavior.
+    2.Make your program stop on specified conditions.
+    3.Examine what has happened, when your program has stopped.
+    4.Change things in your program, so you can experiment with correcting the effects of one bug and go on to learn
+        about another.
+
+gdb slides:
+https://www.cs.umd.edu/~srhuang/teaching/cmsc212/gdb-tutorial-handout.pdf
+
+gdb tutorial with more detailed examples and code:
+https://www.cprogramming.com/gdb.html
+
+------------------------------------------------------------------------------------------------------------------------------
+
+man useful instructions for beginners:
+
+Pay attention to the section number: Suppose you want help on printf. there are at least two of them: in shell and in C. The bash version of printf is in section 1, the C version is in section 3 or 3C. If you don't know which one you want, type man -a printf, and all manual pages will be displayed.
+
+If what you are looking for is the format of printf with all % codes and it doesn't appear on printf man page, you can jump to related man pages listed under SEE ALSO paragraph. You may find something like formats(5), which suggests you to type 
+man 5 formats.
+
+If you are annoyed that man printf gives you printf(1) and all you want is printf(3), you have to change the order of scanned directories in the MANPATH environment variable and put the ones for C language before the ones for shell commands. This may happen also when Fortran or TCL/Tk man pages are listed before C ones.
+
+If you don't know where to start, type man intro, or man -s <section> intro. This gives you a summary of commands of requested section.
+
+Sections are well defined:
+
+1 is for shell commands,
+2 is for system calls,
+3 is for programming interfaces (sometimes 3C for C, 3F for Fortran...)
+5 is for file formats and other rules such as printf or regex formats.
+Last but not least: information delivered in man pages is not redundant, so read carefully from beginning to end for increasing your chances to find what you need.
+(https://unix.stackexchange.com/questions/1841/tricks-and-tips-for-finding-information-in-man-pages)
+------------------------------------------------------------------------------------------------------------------------------
+basic POSIX commands and file descriptor links:
+https://www.classes.cs.uchicago.edu/archive/2017/winter/51081-1/LabFAQ/lab2/fileio.html#file_status
+https://www.geeksforgeeks.org/input-output-system-calls-c-create-open-close-read-write/
+https://www.computerhope.com/jargon/f/file-descriptor.htm
+------------------------------------------------------------------------------------------------------------------------------
+File Descriptors
+The POSIX file access APIs (e.g. read(2) and write(2)) operate on file descriptors. File descriptor is an integer that uniquely identifies an open file of the process.
+
+When a process makes a successful request to open a file, the kernel returns a file descriptor which points to an entry in the kernel's global file table. The file table entry contains information such as the inode of the file, byte offset, and the access restrictions for that data stream (read-only, write-only, etc.).
+
+(inode is short for index node, an inode is information contained within a Unix system that contains details about each file, such as the node, owner, file, location of file, etc.)
+
+OR
+
+When a file is opened or created by a process the kernel assigns a position in the array called the file descriptor. Each entry of this array actually contains a pointer to a file table which stores each of the three pieces of information: file, file status flags, and offset. The file table does not itself contain the file, but instead has a pointer to another table (called the vnode table), which has vital information about the file, including its location in memory. The vnode table is unique for each file. 
+
+file descriptor  --->  file table  --->   vnode table
+
+(https://www.classes.cs.uchicago.edu/archive/2017/winter/51081-1/LabFAQ/lab2/fileio.html#file_status)
+
+Normally, when a process starts, it has (at least) three already-open file descriptors:
+
+0: standard input (STDIN) (read only) 
+The default data stream for input, for example in a command pipeline. In the terminal, this defaults to keyboard input from the user.
+1: standard output (STDOUT) (write only)
+The default data stream for output, for example when a command prints text. In the terminal, this defaults to the user's screen.
+
+2: standard error (STDERR) (write only)
+The default data stream for output that relates to an error occurring. In the terminal, this defaults to the user's screen.
+
+As additional files are opened (e.g. with open(2), creat(2) or pipe(2)) each is assigned the lowest unused file descriptor.
+(*If you want a little more truth, these integers are indexes into a table of open files that the Operating System maintains for each process)
+
+Input/Output Redirection
+
+Two other operations can be used to manipulate file descriptors:
+close(2) closes the file on the specified file descriptor, making that file descriptor available for reuse.
+dup(2) allocates the lowest available file descriptor, and creates another reference to the open file instance on the specified file descriptor.
+
+Input/output redirection is accomplished by:
+opening the new input/output file
+closing the file descriptor (0, 1, 2) to be replaced
+duplicate the new input/output file to the (newly vacated) file descriptor to be replaced
+close the (now redundant) file descriptor on to which that file was originally opened
+
+Example: input redirection
+int ifd = open(newfile, O_RDONLY);
+if (ifd >= 0) {
+    close(0);
+    dup(ifd);
+    close(ifd);
+}
+
+Example: output redirection
+int ofd = creat(newfile, 0666);
+if (ofd >= 0) {
+    close(1);
+    dup(ofd);
+    close(ofd);
+}
+------------------------------------------------------------------------------------------------------------------------------
+DUP and DUP2
+
+The dup() system call creates a copy of a file descriptor.
+
+It uses the lowest-numbered unused descriptor for the new descriptor.
+If the copy is successfully created, then the original and copy file descriptors may be used interchangeably.
+They both refer to the same open file description and thus share file offset and file status flags.
+
+
+The dup2() system call is similar to dup() but the basic difference between them is that instead of using the lowest-numbered unused file descriptor, it uses the descriptor number specified by the user.
+
+(https://www.geeksforgeeks.org/dup-dup2-linux-system-call/)
+------------------------------------------------------------------------------------------------------------------------------
+Signals in C language
+
+A signal is a software generated interrupt that is sent to a process by the OS because of when user press ctrl-c or another process tell something to this process.
+There are fix set of signals that can be sent to a process. signal are identified by integers.
+Signal number have symbolic names. For example SIGCHLD is number of the signal sent to the parent process when child terminates.
+Examples:
+
+#define SIGHUP  1   /* Hangup the process */ 
+#define SIGINT  2   /* Interrupt the process */ 
+#define SIGQUIT 3   /* Quit the process */ 
+#define SIGILL  4   /* Illegal instruction. */ 
+#define SIGTRAP 5   /* Trace trap. */ 
+#define SIGABRT 6   /* Abort. */
+
+OS Structures for Signals
+
+For each process, the operating system maintains 2 integers with the bits corresponding to a signal numbers.
+The two integers keep track of: pending signals and blocked signals
+With 32 bit integers, up to 32 different signals can be represented.
+
+There are several default signal handler routines. Each signal is associated with one of these default handler routine. The different default handler routines typically have one of the following actions:
+    Ign: Ignore the signal; i.e., do nothing, just return
+    Term: terminate the process
+    Cont: unblock a stopped process
+    Stop: block the process
+---------------------------------------------------
+// CPP program to illustrate 
+// default Signal Handler 
+#include<stdio.h> 
+#include<signal.h> 
+
+int main() 
+{ 
+    signal(SIGINT, handle_sigint); 
+    while (1) 
+    { 
+        printf(“hello world\n”); 
+        sleep(1); 
+    } 
+    return 0; 
+} 
+---------------------------------------------------
+Output: Print hello world infinite times. If user presses ctrl-c to terminate the process because of SIGINT signal sent and its default handler to terminate the process.
+
+hello world   
+hello world         
+hello world         
+terminated          
+
+User Defined Signal Handlers
+
+A process can replace the default signal handler for almost all signals (but not SIGKILL) by its user’s own handler function.
+A signal handler function can have any name, but must have return type void and have one int parameter.
+Example: you might choose the name sigchld_handler for a signal handler for the SIGCHLD signal (termination of a child process). Then the declaration would be:
+
+void sigchld_handler(int sig);
+When a signal handler executes, the parameter passed to it is the number of the signal. A programmer can use the same signal handler function to handle several signals. In this case the handler would need to check the parameter to see which signal was sent. On the other hand, if a signal handler function only handles one signal, it isn’t necessary to bother examining the parameter since it will always be that signal number.
+---------------------------------------------------
+// CPP program to illustrate 
+// User-defined Signal Handler 
+#include<stdio.h> 
+#include<signal.h> 
+
+// Handler for SIGINT, caused by 
+// Ctrl-C at keyboard 
+void handle_sigint(int sig) 
+{ 
+    printf("Caught signal %d\n", sig); 
+} 
+
+int main() 
+{ 
+    signal(SIGINT, handle_sigint); 
+    while (1) ; 
+    return 0; 
+} 
+---------------------------------------------------
+Using signal() imposes important limitations what you are allowed to do inside the signal handlers.
+
+(https://www.geeksforgeeks.org/signals-c-language/)
+------------------------------------------------------------------------------------------------------------------------------
+A segmentation fault is an implementation defined behavior. The standard does not define how the implementation should deal with undefined behavior and in fact the implementation could optimize out undefined behavior and still be compliant. To be clear, implementation defined behavior is behavior which is not specified by the standard but the implementation should document. Undefined behavior is code that is non-portable or erroneous and whose behavior is unpredictable and therefore can not be relied on.
+
+You can trigger a segfault by doing the following:
+
+char *c = NULL;
+...
+*c; // dereferencing a NULL pointer
+
+------------------------------------------------------------------------------------------------------------------------------
+If you want to understand file permissions:
+
+https://www.linux.com/tutorials/understanding-linux-file-permissions/
+
+------------------------------------------------------------------------------------------------------------------------------
+(https://linux.die.net/man/3/getopt_long)
+
+int getopt_long(int argc, char * const argv[],
+           const char *optstring,
+           const struct option *longopts, int *longindex);
+
+extern char *optarg;
+extern int optind, opterr, optopt;
+
+The getopt() function parses the command-line arguments. Its arguments argc and argv are the argument count and array as passed to the main() function on program invocation. An element of argv that starts with '-' (and is not exactly "-" or "--") is an option element. The characters of this element (aside from the initial '-') are option characters. If getopt() is called repeatedly, it returns successively each of the option characters from each of the option elements.
+
+The variable optind is the index of the next element to be processed in argv. The system initializes this value to 1. The caller can reset it to 1 to restart scanning of the same argv, or when scanning a new argument vector.
+
+If there are no more option characters, getopt() returns -1. Then optind is the index in argv of the first argv-element that is not an option.
+
+optstring is a string containing the legitimate option characters. If such a character is followed by a colon, the option requires an argument, so getopt() places a pointer to the following text in the same argv-element, or the text of the following argv-element, in optarg.
+
+By default, getopt() permutes the contents of argv as it scans, so that eventually all the nonoptions are at the end.
+
+If getopt() does not recognize an option character, it prints an error message to stderr, stores the character in optopt, and returns '?'. The calling program may prevent the error message by setting opterr to 0.
+
+If getopt() does not recognize an option character, it prints an error message to stderr, stores the character in optopt, and returns '?'. The calling program may prevent the error message by setting opterr to 0.
+
+If getopt() finds an option character in argv that was not included in optstring, or if it detects a missing option argument, it returns '?' and sets the external variable optopt to the actual option character. 
+
+You have to use getopt_long()
+------------------------------------------------------------------------------------------------------------------------------
+fopen and read are functions of different families. The families are:
+
+fopen with fread (and also getc), from the C standard library.
+open with read, from the POSIX specification.
+
+The first family uses file pointers as FILE* types, while the second one uses file descriptors as int types. You can't mix the two families as long as you don't convert from one file descriptor type to the other. The conversion from FILE* to int is done with the POSIX function fileno.
+
+When each program begins, three file descriptors are open and ready for use.
+
+stdin
+The primary input channel for the program. Default source is the user’s keyboard, but it can easily be switched to be from another process via a pipe ( | ) or a file via a file redirection ( < ).
+
+stdout
+The primary output channel for program’s data output. Default destination is the user’s screen, but it can easily be switched to another process via a pipe ( | ) or a file via a file redirection ( > ).
+
+stderr
+Output channel for error messages. Default destination is the user’s screen, but it can be switched to another process via a pipe ( | ) or a file via a file redirection ( > ).
+
+stderr Redirection
+Redirect standard error (error messages) to a file (instead of the terminal) using the 2> metacharacter. The 2>&1 metacharacter redirects stderr to the same file that stdout was redirected to.
+
+# stdout to terminal and stderr to file:
+$ command 2> file
+
+# stdout and stderr to different files:
+$ command > out_file  2> error_file
+
+# stdout and stderr to the same file:
+$ command > file 2>&1
+------------------------------------------------------------------------------------------------------------------------------
+
+Treat for those who bothered reading till the end:
+reading 500 bytes at a time is faster than reading one byte at a time
+*wink wink*
+
+------------------------------------------------------------------------------------------------------------------------------

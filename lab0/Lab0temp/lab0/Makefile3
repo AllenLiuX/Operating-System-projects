@@ -1,0 +1,37 @@
+#NAME: Wenxuan Liu
+#EMAIL: allenliux01@163.com
+#ID: 805152602
+
+CC=gcc
+PGM=lab0
+EXIT_OK=0
+EXIT_ARG=1
+EXIT_BADIN=2
+EXIT_BADOUT=3
+EXIT_FAULT=4
+SIG_SEGFAULT=139
+
+all: lab0
+test: lab0.c
+	gcc -g -Wall -Wextra -o lab0 lab0.c
+clean:
+	rm lab0 *.gz
+check:
+#./smoketest.sh
+#test if it causes and catches segfault correctly
+	errors=0
+	./$PGM --segfault
+	if [ $? -ne $SIG_SEGFAULT ]
+	then
+	    let errors+=1
+	    echo "segfault fails."
+	fi
+	./$PGM --segfault --catch 2>STDERR
+	if [ $? -ne $EXIT_FAULT ]
+	then
+	    let errors+=1
+	    echo "segfault catch fails."
+	fi
+
+dist:
+	tar -cvzf lab0-805152602.tar.gz lab0.c Makefile smoketest.sh README backtrace.png breakpoint.png

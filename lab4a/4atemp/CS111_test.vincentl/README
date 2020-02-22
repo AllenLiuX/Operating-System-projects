@@ -1,0 +1,22 @@
+#Name: Wenxuan Liu
+#Email: allenliux01@163.com
+#ID: 805152602
+
+S/N: BBGW19030060
+MAC: 2CF7F106A33B
+
+Files:
+
+my_beaglebone.jpg: a selfie of me holding my assembled Beaglebone.
+
+connected.jpg: a screenshot showing me gave my beaglebone a name (805152602.lasr.cs.ucla.edu) and configured network access.
+
+copy.png: a screenshot from a local session in which I copied(scp) a hello world program from local to my Beaglebone.
+
+build_run.png: a screenshot from a WIFI SSH session where I built and ran a trivial hello world program.
+
+git.png ... a screenshot from a WIFI SSH session where I installed git and cloned a repository.
+
+README: the current file with the files descriptions.
+
+Makefile: a file for building the tarball.

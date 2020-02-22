@@ -1,0 +1,75 @@
+#NAME: Wenxuan Liu
+#EMAIL: allenliux01@163.com
+#ID: 805152602
+
+Questions:
+QUESTION 2.3.1 - Cycles in the basic list implementation
+In 1 and 2-thread list tests, most of the cycles are spent on the lsit operations themselves, instead of the waiting for locks.
+It is because when there are low number of threads, locks would become available more quickly for each thread, so there would be only a little time spent on waiting for the locks compared to high threads. Therefore, there is little synchronization overhead for thread of 1 or 2.
+In the high-thread spin-lock tests, most of the time is being spent on waiting for locks, because threads are keep spinning to wait locks to be unlocked, which consumes CPU a lot as they need to wait for a long time when there are a lot of threads.
+In the hig-thread mutex tests, most of the time is being spent on mutex operation(init, lock, unlock, etc.). Because these functions are very slow, and there would be a lot of these operations when there are many threads operating mutexes and trying to get the same lock.
+
+QUESTION 2.3.2 - Execution Profiling
+The code consuming the most cycles is the two lines that grabs and waiting for the spin lock in the run_thrd function for each thread operation:
+while(__sync_lock_test_and_set(spin_locks+hash, 1));
+while(__sync_lock_test_and_set(spin_locks+i, 1));
+Because with large number of threads, this operation would run a lot of times in the while loop for all the threads that don't have the lock. When there are many threads, most of them will keep waiting for the lock and keep consuming the CPU, which is extremely expensive for their contention.
+
+QUESTION 2.3.3 - Mutex Wait Time
+The average lock-wait time rise so dramatically with the number of contending threads is because all the threads have to wait for the same lock to be unlocked. So, when there are a lot of threads and only one mutex lock, "convoy" will be formed and the resource becomes a bottleneck. The more threads, the more waiting time each thread would have for the more competitive contention, which leads to much high total overhead for the contention.
+the completion time per operation rise with the number of contending threads is because of the overhead caused by the threads waiting for lock. 
+The rise is less dramatically than lock-wait time is because that the completion time is composed of both the lock waiting time and the list operation time. Since the list operations are basically independent of the number of threads, the list operation time will take a big fraction of the completion time which remains stable when threads number increases. So the completion time rises less dramatically, making the wait time per operation go up faster than the completion time per operation.
+
+QUESTION 2.3.4 - Performance of Partitioned Lists
+The more the number of lists, the better the performance(higher throughput) of the synchronized methods including mutex and spinning lock.
+The throughput should continue increasing as the number of lists is further increased, until the reaching its limits(list number much higher than the threads number). Because the more the lists, the more parallel operations can be performed given that different threads can run simultaneously on different lists, which increases the throughput and decreases the contention. However, when there is enough lists that no contention is between threads, further increase of list number will decrease the performance because more operations and overheads will occur, while threads can not make more throughput since they are all running.
+It seems basically true that the throughput of an N-way partitioned list should be equivalent to the throughput of a single list with fewer (1/N) threads. Because as the number of threads increases in the graph, the performance of N-partitioned list decreases obviously, and basically reaches the similar throughput level of sigle list with 1/N threads. HOWEVER, the N-way partitioned list seems to lower throughput than single list with 1/N threads, because N-way partitioned list would spend more time waiting for the lock, which has higher overhead.
+
+
+
+
+files:
+lab2_list.c:
+	A source file that implements a multithreaded program that inserts some nodes to a list and delete these nodes from the list, which can also be implemented by deviding into specified number of lists.
+
+SortedList.h:
+	The header file that defines the interface of an circular linked list.
+
+SortedList.c:
+	The source file that defines each function of the linked list described in SortedList.h.
+
+lab2b_list.gp:
+	The source file that makes the graphs for lab2_list by gnuplot and lab2b_list.csv.
+
+lab2b_list.csv:
+	The file that stores the test results of the lab2_list with different testcases in Makefile.
+
+README:
+	README is the current file which answers the questions and describes all the files and corresponding contents in the tarball.
+
+Makefile:
+It has the following 6 functionalities:
+	default: 
+		compile the lab2_add.c and lab2_list.c to excutable lab2_add and lab2_list with -Wall, -g, -o, -lpthread and -Wextra options.
+	build: 
+		same as default.
+	tests: 
+		run the test cases for lab2_add and lab2_list and output to lab2_add.csv and lab2_list.csv
+	graphs: 
+		make the graphs with gnuplot based on data in lab2_add.csv and lab2_list.csv
+	profile:
+		run tests with profiling tools to generate an execution profiling report.
+	clean: 
+		remove all the files created by the makefile, and return the dictionary to the original state as just after untarred.
+	dist: 
+		make a tarball containing all the required files.
+Graphs:
+	lab2b_1.png ... throughput vs. number of threads for mutex and spin-lock synchronized list operations.
+	lab2b_2.png ... mean time per mutex wait and mean time per operation for mutex-synchronized list operations.
+	lab2b_3.png ... successful iterations vs. threads for each synchronization method.
+	lab2b_4.png ... throughput vs. number of threads for mutex synchronized partitioned lists.
+	lab2b_5.png ... throughput vs. number of threads for spin-lock-synchronized partitioned lists.
+
+CITATION:
+TA's demo codes on the PPT, and the spec of this project:
+http://web.cs.ucla.edu/~harryxu/courses/111/winter20/ProjectGuide/P2B.html

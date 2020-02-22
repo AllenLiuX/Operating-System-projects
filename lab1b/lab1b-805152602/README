@@ -1,0 +1,29 @@
+#NAME: Wenxuan Liu
+#EMAIL: allenliux01@163.com
+#ID: 805152602
+
+There are four files:
+1. lab1b-server.c:
+This is the source file for lab1b-server. After compiling it, it hosts a server which takes input from client with corresponding port, and direct it to shell to execute the command, and then send the output to the client.
+With mandatory --port= option, it indicates chosen port to communicate data.
+With --compress option, it receives compressed data, depresses the data to process, and compresses the output again to send to the client.
+
+2. lab1b-client.c:
+This is the source file for lab1b-client. After compiling it, it hosts a client which sends command to server, and receive output from server and print in on STDOUT.
+With mandatory --port= option, it indicates chosen port to communicate data.
+With --log= option, it creates(or writes to) a assigned file to log the number of bytes and contents of data of the sending and receiving communication.
+With --compress option, it sends compressed data to server, and receives compressed data from server and then decompresses it.
+
+3. Makefile:
+It has the following three functionalities:
+default: compile the lab1b-server.c and lab1b-client.c to excutable lab1b-server and lab1b-client.c with -Wall, -lz and -Wextra options.
+dist: make a tarball containing all the required files including lab1b-server.c, lab1b-client.c, README, and Makefile.
+clean: remove all the files created by the makefile, and return the dictionary to the original state as just after untarred.
+
+4. README:
+README is the current file which describes all the files and corresponding contents in the tarball.
+
+CITATION:
+TA's PPT and demo codes on the tuturials:
+https://www.zlib.net/zlib_how.html
+http://www.cs.rpi.edu/~moorthy/Courses/os98/Pgms/socket.html

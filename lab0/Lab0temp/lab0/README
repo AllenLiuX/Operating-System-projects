@@ -1,0 +1,44 @@
+NAME: Wenxuan Liu
+EMAIL: allenliux01@163.com
+ID: 805152602
+SLIPDAYS: 0
+
+INCLUDED FILES:
+1. lab0.c
+This is the source file for lab0. It can be compiled to an executable object which copies STDIN to STDOUT, and offers four extra options. For implementation, it basically uses getopt_long() function to parse the arguments taken outside. There are four options in all: "--input" specifies a file as standard input, "--output" specifies a file as output, "--segfault" forces a segmentation fault, and "--catch" catches the segmentation fault and logs an error message. When option is invalid, it exit with code 1. When input file is not specified, it uses STDIN as input by default; when output file is not specified, it uses STDOUT as output by default. The copying process is done by read and write byte by byte through system calls. The segmentation fault is triggered by dereferencing a null pointer, which should then exit with code 139. To catch the segmentation fault, we use signal() to catch the fault and direct it to a fault handler and exit with code 4. When the input file failed to open and read, it exit with code 2; When the output file failed to be written to, it exit with code 3.
+
+2. Makefile
+Makefile contains the four functionalities: 
+'make all' calls 'make lab0', which compiles source file lab0.c to executable object lab0; 
+'make dist' makes a gzip tarball including lab0.c, Makefile, smokiest.sh, backtrace.png, breakpoint.png, README.
+'make clean' removes all the files created when making or running, and return the directory to the status that was just untarred.
+'make check' execute smokiest.sh, which tests the validity of the program lab0 in various scenarios.
+
+3. smoketest.sh
+This is the shell script that tests the validity of the program lab0. It basically tests the following functionalities:
+1) Input&output test. 
+It test the base case that we use the valid --input and --output options to copy the content in in.txt to out.txt. Then, check the return value as 0, and compare whether or not the contents are the same.
+2) Invalid options. 
+It tests the situations that we use bad argument like --bogus, or use option with wrong argument number like '--input' without specifying the input file. Check whether or not it returns 1.
+3) Read permission denied. 
+Make an input file without read permission, and check whether or not the program returns 2 when using it as the input file.
+4) Write permission denied. 
+Make an output file without write permission, and check whether or not the program returns 3 when using it as the output file. 
+5) Non-existed input file. 
+Take a file that does not exist as the input file. Check whether or not the program returns 2 for bad input.
+6) Non-existed output file. 
+Take a file that does not exist as the output file. Check whether or not the program returns 1 for it is valid operation. And check whether or not the program creates that file and write text into it.
+7) Segfault raise and catch. 
+First test the --segfault option only for return code 139. Then, test the --segfault --catch that it should catch the fault and exit with code 4 even when the option sequence is '--segfault' at the front.
+8) Segfault raised and exited before stdin to stdout. 
+Use --segfault as well as --output simultaneously. Check whether or not the the output file is created and nothing is written onto it.
+Finally, check whether or not any error above occurs. If non of them occurs, output 'SUCCESS' for passing the test. Otherwise output "FAIL".
+
+4. backtrace.png
+This is a screenshot which shows the backtrace of the segmentation fault of lab0 in gdb. The segmentation fault is caused by the --segfault option, and as we can see in the screenshot, the segfault is caused in the 93 line of the main, with a statement "*ptr = 'a';", which dereference a null pointer.
+
+5. breakpoint.png
+This is a screenshot which examines the value of the pointer ptr at line 93 in main. We first set a breakpoint at line 93, and then run the program(with --segfault option), and the program break at line 93, and now we print the value of ptr which shows $1 = 0x0, confirming that it is indeed a null pointer, which could cause a segmentation fault when dereferencing it.
+
+6. README
+README is the current file which describes all the files and corresponding contents in the tarball.
