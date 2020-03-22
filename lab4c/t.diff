@@ -1,0 +1,121 @@
+18a19
+> #include <openssl/ssl.h>
+42a44,46
+> // SSL structures
+> SSL_CTX* new_context = NULL;
+> SSL *ssl = NULL;
+61c65,67
+< 		dprintf(sock, "%s\n", out);
+---
+> 		char out[200];
+> 		sprintf(out, "%s\n", str);
+> 		SSL_write(ssl, out, strlen(out) + 1);
+63,64c69,72
+< 	fprintf(stderr, "%s\n", out);
+< 	fprintf(file, "%s\n", out);
+---
+> 
+> 	fprintf(stderr, "%s\n", str);
+> 
+> 	fprintf(file, "%s\n", str);
+75c83,85
+<    	exit(0);
+---
+>     	SSL_shutdown(ssl);
+>     	SSL_free(ssl);
+>     	exit(0);
+86,89c96,99
+< 		sprintf(out, "%02d:%02d:%02d %d.%1d", curr_time->tm_hour, 
+< 				curr_time->tm_min, curr_time->tm_sec, t/10, t%10);
+< 		print(out, TO_SERVER);
+< 		next_time = my_clock.tv_sec + period; 
+---
+>     		sprintf(out, "%02d:%02d:%02d %d.%1d", curr_time->tm_hour, 
+>     			curr_time->tm_min, curr_time->tm_sec, t/10, t%10);
+>     		print(out, TO_SERVER);
+>     		next_time = my_clock.tv_sec + period; 
+137c147
+< 	int ret = read(sock, input, 256);
+---
+> 	int ret = SSL_read(ssl, input, 256);
+164,165c174,175
+< 		{"host", required_argument, NULL, 'h'},
+< 		{0, 0, 0, 0}
+---
+>     		{"host", required_argument, NULL, 'h'},
+>     		{0, 0, 0, 0}
+176,177c186,187
+<             	if (file == NULL) {
+< 	           		fprintf(stderr, "Logfile invalid\n");
+---
+>             			if(file == NULL) {
+> 	           			fprintf(stderr, "Logfile invalid\n");
+237c247,269
+<   	}
+---
+> 	}
+> 
+>  	SSL_library_init();
+>     	SSL_load_error_strings();
+>     	OpenSSL_add_all_algorithms();
+>     	new_context = SSL_CTX_new(TLSv1_client_method());
+>     	if (new_context == NULL) {
+>         	fprintf(stderr, "Unable to get SSL context\n");
+>         	exit(2);
+>     	}
+>     	ssl = SSL_new(new_context);
+>     	if (ssl == NULL) {
+>         	fprintf(stderr, "Unable to complete SSL setup\n");
+>         	exit(2);
+>     	}
+>     	if (!SSL_set_fd(ssl, sock)) {
+>         	fprintf(stderr, "Unable to associate fd w/SSL\n");
+>         	exit(2);
+>     	}
+>     	if (SSL_connect(ssl) != 1) {
+>         	fprintf(stderr, "SSL Connection rejected\n");
+>         	exit(2);
+>     	}
+251,254c283,286
+< 	if (temp== NULL) {
+< 		fprintf(stderr, "Failed to initialize AIO\n");
+< 		mraa_deinit();
+< 		return EXIT_FAILURE;
+---
+> 	if (temp==NULL) {
+>         	fprintf(stderr, "Failed to initialize AIO\n");
+>         	mraa_deinit();
+>         	exit(1);
+258,259c290,291
+< 	pollInput.fd = sock; 
+< 	pollInput.events = POLLIN; 
+---
+>    	pollInput.fd = sock; 
+>     	pollInput.events = POLLIN; 
+261,266c293
+< 	char *input;
+< 	input = (char *)malloc(1024 * sizeof(char));
+< 	if(input == NULL) {
+< 		fprintf(stderr, "Could not allocate input buffer\n");
+< 		exit(1);
+< 	}
+---
+>     	char input[256];
+268,273c295,300
+< 	while(1) {
+< 		time_stamp();
+< 		int ret = poll(&pollInput, 1, 0);
+< 		if(ret) {
+< 			server_input(input);
+< 		}
+---
+>     	while(1) {
+>   		time_stamp();
+>     		poll(&pollInput, 1, 0);
+>     		if (pollInput.revents & POLLIN) {
+>     			server_input(input);
+>     		}
+277c304
+< 	exit(0);
+---
+>    	exit(0);

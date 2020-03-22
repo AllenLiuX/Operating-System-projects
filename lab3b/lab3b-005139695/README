@@ -1,0 +1,10 @@
+NAME: Wenxuan Liu,Jenny Zhan
+EMAIL: allenliux01@163.com,yqzhan@g.ucla.edu
+ID: 805152602,005139695
+
+descriptions of each of the included files:
+    Makefile: can do default, dist, clean
+
+    lab3b.py: builds to do audit of file system consistency analysis, input is .csv and output is error message. exit 0 if consistent, 1 if unsuccessful, 2 if successful but unconsistent
+
+    README: this file

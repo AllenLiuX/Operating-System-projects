@@ -1,0 +1,15 @@
+NAME: Wenxuan Liu
+EMAIL: allenliux01@163.com
+ID: 805152602
+
+Files:
+lab4c_tcp.c
+	The source file that can be compiled to a program to be run on Beaglebone board for measuring temperature with 'scale', 'period', 'log' options, and receives commands and sends the stats to server with specified port and host.
+lab4c_tls.c
+	The source file that can be compiled to a program to be run on Beaglebone board for measuring temperature with 'scale', 'period', 'log' options, and receives commands and sends the stats to server with specified port and host, in an encrypted method with ssl.
+Makefile
+	default ... build both versions of your program (compiling with the -Wall and -Wextra options).
+	clean ... delete all programs and output created by the Makefile and restore the directory to its freshly untarred state.
+	dist ... create the deliverable tarball.
+README
+	descriptions of each of the included files.

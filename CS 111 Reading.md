@@ -316,6 +316,146 @@ Used by compiler, linkage editor, program loader, operating system, or programme
 
 
 
+## 8 Inter-Process Communication
+
+### Process Interactions
+
+-  **coordination of operations** with other processes
+  - Synchronization: mutexes, condition variables
+  - Signals exchange: kill
+  - control operation: fork, wait, ptrace
+- **data exchange** between processes
+  - Uni-Directional streams
+  - Bi-directional interactions
+
+### Uni-Directional Byte Streams
+
+- program accepts a byte-stream input, and produces a byte-stream output (**suitable input to the next**), and works independently
+- byte streams are unstructured, 可被存进file再放入pipeline
+- Pipes are temporary files with a few special features -> recognize the difference between a file and an inter-process data stream
+  - 如果reader用尽了pipe的data，但还有open write file descripter, 这个reader就没得到EOF。要么reader blocked直到更多data来，要么writer blocked
+  - Available buffering of pipe may be limited -> **FLOW CONTROL**： 如果writer太快，就block writer直到reader追上来
+  - 如果给没有open read file descriptor的pipe写，则illegal并SIGPIPE
+  - reader writer both closed, the file automatically deleted
+- Pipeline -> closed system, no authentication or encrypttion.
+
+### Named Pipes
+
+- A named pipe can be used as a **rendezvous** point for unrelated processes.
+- Readers and writers cannot authenticate each other
+- Writes from multiple writers may be intersperse，分不清bytes从哪里来
+- They do not enable clean fail-overs from a failed reader to its successor
+- All readers and writers must be running on the same node
+
+### Mailboxes
+
+- Each write is stored and delivered as a distinct message
+- Each write 伴随sender的authentication identification
+- Unprocessed messages remain in the mailbox after the death of a reader and can be retrieved by the next reader.
+- Still subject to single node/single operating system restrictions
+
+### General Network Connections
+
+- Linux **API:** socket(IPC end-point + protocol + data model), bind(socket + local network address), connect, listen. accept, send, recv
+- options: byte streams over reliable connections (e.g. TCP) , best effort datagrams (e.g. UDP)
+- Higher level: Remote Procedure Calls, RESTful service models, Publish/Subscribe services
+- Complexities: Interoperablity, security, noeection and node failures, server address
+
+### Shared Memory
+
+- High performance of IPC = efficiency + trhoughput + latency
+- Best performance: not buffering, but Shared Memory:
+  - create a file -- each process maps the file into VAS(virtual address space) --  shared segment locked-down and never paged out -- process agree on data structures(eg. poll) in SS --anything written to SS will be immediately available.
+- LIMITATION: Only for processes on same memory bus; a bug in one process can destroy the communication; No authentication of data from which process.
+
+### Network Conntection and Out-of-Band Signals
+
+- Allow an important message to go directly to front of the line.
+- **Out-of-band**: Sending a signal that could invoke a registered handler, and flush (without processing) all of the bufferred data -> different channel from buffer, recipient was local
+- 多信道：one heavily used channel for normal requests + another reserved for out-of-band requests。 Periodically polls the out-of-band channel -> allow preempting queued operations.
+
+
+
+## 9 User-Mode Thread Implementation
+
+### Thread
+
+- is an independently schedulable unit of execution. 
+- runs within the address space of a process. 
+- has access to all of the system resources owned by that process. 
+- has its own general registers. 
+- has its own stack (within the owning process' address space).
+
+- a process is a container for an address space and resources. a thread is the unit of scheduled execution.
+
+### Simple Threads Library (User Mode)
+
+- Create: allocate memory for thread-private stack from the heap, create thread descriptor with identification, scheduling, pointer to stack
+- Yield or Sleep: save general registers, remove from ready queue(sleep), select next thread on queue
+- Dispatch: restore saved registers and return to ready queue
+- Exit: free stack and descriptor
+- **Scheduling**: SIGALARM as timer signals, can interrupt(yield) thread running too long.
+- Sigprocmask: temporarily block signals
+
+### Kernel implemented threads
+
+Solves the following problems:
+
+- when a thread blocks, all threads(within that process) stop executing. OS cannot know thrds
+- OS cannot execute threads in parallel on multiple cores if OS not aware of multiple thrds.
+- futex(7) approach: uses an atomic instruction to attempt to get a lock in user-mode, call OS if failed.
+
+### Performance
+
+- **Light weight thread**: non-preenptive scheduling下user-mode更快，不用context switch
+- Multi-processor下kernel-mode更快，加大throughput大于损失的context switch
+
+
+
+## 10 Deadlock Avoidance
+
+- 不能避免的情况：
+  - mutual exclusion is fundamental. 
+  - hold and block are inevitable. 
+  - preemption is unacceptable. 
+  - the resource dependency networks are imponderable.
+- Deadlock例子：
+  - main memory is exhausted. 
+  - we need to swap some processes out to secondary storage to free up memory. 
+  - swapping processes out involves the creation of new I/O requests descriptors, which must be allocated from main memory.
+  - some process will free up resources when it completes, but the process needs more resources in order to complete.
+- **Deadlock Avoidance**: keep track of free resources, and refuse to grant requests that would put the system into a dangerously resource-depleted state
+
+### Reservations
+
+- 运行中拒绝requests不好handle，所以ask processes to reserve resources before actually need them.
+- **sbrk**: 没有allocate更多memory，而是让OS改变data segment的大小in VAS。直到refer新pages才allocate.
+- 如果能确定在over-tex memory，就可以抛出error来deal，而不是真正运行时kill process
+- 类似情况reservation：闪存少->refuse create new file, thrashing -> refuse new process, network traffic saturate agreement -> refuse crease or bind socket
+
+### Over-Booking
+
+- Grant more reservations than actually resources we have -> **Relative-safe**
+- 情况：airlines; network brandwidth handle 125% traffic and maintain 99% performance
+- kill random process太可怕，所以OS一般under-book(10%)
+
+### Dealing with Rejection
+
+failed with clean error -> process can try to manage in the most graceful way:
+
+- A **simple** program might log an error message and exit. 
+- A **stubborn** program might continue retrying the request (in hope tht the problem is transient). 
+- A **more robust** program might return errors for requsts that cannot be processed (for want of resources), but continue trying to serve new requests (in the hope that the problem is transient). 
+- A **more civic-minded** program might attempt to reduce its resource use (and therefore the number of requests it can serve).
+
+
+
+### 11 Health Monitoring and Recovery
+
+
+
+
+
 ## Lec 1
 
 ### Operating System
