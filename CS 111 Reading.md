@@ -1,5 +1,9 @@
 # CS 111
 
+[TOC]
+
+
+
 ## 1 Interface Stability
 
 #### The Criticality of Interfaces in Architecture
@@ -671,7 +675,6 @@ Applications do: (each in different layers)
 - linux has supervisor-mode stack.
   -  retain the state of in-progress system calls 
   - save the state of an interrupt preempted process
-- 
 
 ## Lec 4
 
@@ -685,8 +688,3 @@ Applications do: (each in different layers)
 - starvation
 - Hard & soft priority
 
-## Lec 5
-
-
-
-## Lec 6

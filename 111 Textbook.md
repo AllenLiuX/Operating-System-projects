@@ -1,5 +1,7 @@
 # 111 Textbook
 
+[TOC]
+
 ## 1 Dialogue on the Book
 
 - Virtualization, Concurrency, and Persistence
